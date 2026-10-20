@@ -78,10 +78,19 @@ export default function Dashboard() {
           prevBtnText: 'Anterior',
           doneBtnText: '¡Entendido!',
           steps: [
-            { element: btnNuevaCuentaRef.current, popover: { title: 'Paso 1: Nueva Venta', description: 'Registra una venta manual aquí.' } },
-            { element: tableRef.current, popover: { title: 'Paso 2: Control', description: 'Aquí verás tus ventas y podrás enviar boletas.' } },
-            { element: "aside", popover: { title: 'Paso 3: Menú', description: 'Gestiona clientes e inventario.' } }
-          ],
+  { 
+    element: btnNuevaCuentaRef.current || undefined, 
+    popover: { title: 'Paso 1: Nueva Venta', description: 'Registra una venta manual aquí.' } 
+  },
+  { 
+    element: tableRef.current || undefined, 
+    popover: { title: 'Paso 2: Control', description: 'Aquí verás tus ventas y podrás enviar boletas.' } 
+  },
+  { 
+    element: "aside", 
+    popover: { title: 'Paso 3: Menú', description: 'Gestiona clientes e inventario.' } 
+  }
+],
           onDestroyed: () => { localStorage.setItem("dm_tutorial_seen_v9", "true"); }
         });
         driverObj.drive();
