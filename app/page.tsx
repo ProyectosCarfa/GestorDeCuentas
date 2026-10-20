@@ -155,7 +155,8 @@ export default function LandingPage() {
           <div className="bg-gray-800 text-gray-400 font-bold text-sm px-2 py-0.5 rounded">DM</div>
           <span className="font-bold text-gray-400">Gestor DM</span>
         </div>
-        <p>© {new Date().getFullYear()} Gestor DM. Todos los derechos reservados.</p>
+        <p>© 2026 Gestor DM. Todos los derechos reservados.</p>
+        
         <div className="flex justify-center gap-4 mt-4">
           <a href="#" className="hover:text-green-500 transition">Términos y Condiciones</a>
           <a href="#" className="hover:text-green-500 transition">Privacidad</a>
