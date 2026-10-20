@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import Link from "next/link";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
-import * as htmlToImage from 'html-to-image'; // Importamos la librería
+import * as htmlToImage from 'html-to-image'; 
 
 // --- TIPOS ---
 type AccountStatus = "Activa" | "Por Vencer" | "Vencida";
@@ -52,6 +52,9 @@ export default function Dashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("Dashboard");
   
+  // --- NUEVO ESTADO PARA LA FECHA ---
+  const [fechaHoy, setFechaHoy] = useState("");
+
   // Estados para la boleta
   const [receiptData, setReceiptData] = useState<Account | null>(null);
   const receiptRef = useRef<HTMLDivElement>(null);
@@ -69,6 +72,9 @@ export default function Dashboard() {
     const savedStock = localStorage.getItem("dm_stock_v9");
     if (savedStock) setStock(JSON.parse(savedStock));
 
+    // --- ASIGNAR LA FECHA AQUÍ ---
+    setFechaHoy(new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
+
     const tutorialSeen = localStorage.getItem("dm_tutorial_seen_v9");
     if (!tutorialSeen) {
       setTimeout(() => {
@@ -78,19 +84,19 @@ export default function Dashboard() {
           prevBtnText: 'Anterior',
           doneBtnText: '¡Entendido!',
           steps: [
-  { 
-    element: btnNuevaCuentaRef.current || undefined, 
-    popover: { title: 'Paso 1: Nueva Venta', description: 'Registra una venta manual aquí.' } 
-  },
-  { 
-    element: tableRef.current || undefined, 
-    popover: { title: 'Paso 2: Control', description: 'Aquí verás tus ventas y podrás enviar boletas.' } 
-  },
-  { 
-    element: "aside", 
-    popover: { title: 'Paso 3: Menú', description: 'Gestiona clientes e inventario.' } 
-  }
-],
+            { 
+              element: btnNuevaCuentaRef.current || undefined, 
+              popover: { title: 'Paso 1: Nueva Venta', description: 'Registra una venta manual aquí.' } 
+            },
+            { 
+              element: tableRef.current || undefined, 
+              popover: { title: 'Paso 2: Control', description: 'Aquí verás tus ventas y podrás enviar boletas.' } 
+            },
+            { 
+              element: "aside", 
+              popover: { title: 'Paso 3: Menú', description: 'Gestiona clientes e inventario.' } 
+            }
+          ],
           onDestroyed: () => { localStorage.setItem("dm_tutorial_seen_v9", "true"); }
         });
         driverObj.drive();
@@ -130,7 +136,6 @@ export default function Dashboard() {
   const handleSendCredentials = async (acc: Account) => {
     if (!acc.phone) return Swal.fire('Atención', 'El cliente no tiene un WhatsApp registrado.', 'warning');
 
-    // Mostrar alerta de carga
     Swal.fire({
       title: 'Generando Boleta...',
       text: 'Por favor espera un momento',
@@ -139,37 +144,30 @@ export default function Dashboard() {
       didOpen: () => { Swal.showLoading(); }
     });
 
-    // 1. Cargar los datos en el componente oculto
     setReceiptData(acc);
 
-    // Esperar un momento a que React renderice el HTML oculto
     setTimeout(async () => {
       try {
         if (receiptRef.current) {
-          // 2. Generar la imagen PNG
           const dataUrl = await htmlToImage.toPng(receiptRef.current, { quality: 1, pixelRatio: 2 });
           
-          // 3. Descargar la imagen automáticamente al dispositivo
           const link = document.createElement('a');
           link.download = `Boleta_${acc.clientName.replace(/\s+/g, '_')}_${acc.platform}.png`;
           link.href = dataUrl;
           link.click();
 
-          // 4. Cerrar alerta de carga
           Swal.close();
 
-          // 5. Abrir WhatsApp con el mensaje
           const msg = `🌟 *GESTOR DM - TUS CREDENCIALES* 🌟\n\nHola *${acc.clientName}*, ¡gracias por tu compra! Aquí tienes los datos de acceso para tu cuenta de *${acc.platform}*:\n\n➖➖➖➖➖➖➖➖➖➖\n📧 *Correo:* ${acc.email}\n🔑 *Contraseña:* ${acc.password}\n👤 *Perfil:* ${acc.profile}\n🔢 *PIN:* ${acc.pin}\n➖➖➖➖➖➖➖➖➖➖\n\n📅 *Válido hasta:* ${acc.endDate}\n\n_Adjunto a este mensaje te envío tu boleta de compra en imagen._ 📸\n\nSi tienes algún problema para ingresar, respóndeme a este mensaje. ¡Disfruta tu contenido! 🎬`;
           window.open(`https://wa.me/${acc.phone}?text=${encodeURIComponent(msg)}`, "_blank");
 
-          // Limpiar el estado de la boleta
           setReceiptData(null);
         }
       } catch (error) {
         console.error("Error generando imagen:", error);
         Swal.fire('Error', 'No se pudo generar la imagen de la boleta.', 'error');
       }
-    }, 500); // 500ms para asegurar renderizado
+    }, 500); 
   };
 
   const sendRenewal = (acc: Account) => {
@@ -585,7 +583,8 @@ export default function Dashboard() {
               <p className="text-gray-500 text-sm flex items-center gap-2"><LayoutDashboard size={14}/> {activeTab}</p>
             </div>
             <div className="bg-[#111] border border-[#222] px-4 py-2 rounded-lg text-sm text-gray-300 hidden md:block">
-              {new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+              {/* --- AQUI USAMOS LA VARIABLE EN VEZ DE new Date() --- */}
+              {fechaHoy}
             </div>
           </header>
 
@@ -813,7 +812,6 @@ export default function Dashboard() {
                             {status === 'Vencida' ? (
                               <button onClick={() => sendRenewal(acc)} className="bg-orange-500/10 text-orange-500 hover:bg-orange-500 hover:text-black p-1.5 rounded transition" title="Cobrar"><AlertTriangle size={14} /></button>
                             ) : (
-                              // AQUI LLAMAMOS A LA FUNCION QUE GENERA LA IMAGEN Y ENVIA
                               <button onClick={() => handleSendCredentials(acc)} className="bg-green-500/10 text-green-500 hover:bg-green-500 hover:text-black p-1.5 rounded transition" title="Generar Boleta y Enviar">
                                 <MessageCircle size={14} />
                               </button>
