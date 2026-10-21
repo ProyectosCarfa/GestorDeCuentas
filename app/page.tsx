@@ -2,9 +2,9 @@ import { CheckCircle, Link as LinkIcon, ShieldCheck, ArrowRight, Play, Sparkles,
 import Link from "next/link";
 import Image from "next/image";
 // IMPORTAMOS TODAS LAS IMÁGENES LOCALMENTE
-import AvatarImg from "../src/assets/avatar.png";
-import DashboardImg from "../src/assets/dashboard-img.jpg";
-import LinksImg from "../src/assets/links-img.jpg";
+import AvatarImg from "/avatar.png";
+import DashboardImg from "/dashboard-img.jpg";
+import LinksImg from "/links-img.jpg";
 
 export default function LandingPage() {
   const platforms = ["Netflix", "Disney+", "HBO Max", "Prime Video", "Spotify", "YouTube Premium", "Crunchyroll", "Apple TV+"];
