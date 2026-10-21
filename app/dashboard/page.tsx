@@ -51,6 +51,9 @@ interface StockItem {
 }
 
 export default function Dashboard() {
+  // --- EL SALVAVIDAS ---
+  const [isClient, setIsClient] = useState(false);
+  
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [stock, setStock] = useState<StockItem[]>([]);
@@ -70,14 +73,20 @@ export default function Dashboard() {
 
   const [receiptData, setReceiptData] = useState<Account | null>(null);
   const receiptRef = useRef<HTMLDivElement>(null);
-  
-  // REFERENCIAS CORREGIDAS
   const btnNuevaCuentaRef = useRef<HTMLButtonElement>(null);
   const tableRef = useRef<HTMLDivElement>(null);
   const btnManageRef = useRef<HTMLButtonElement>(null);
   const btnSendRef = useRef<HTMLButtonElement>(null);
 
+  // Inicializamos el cliente
   useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    // Si no es cliente, no hacemos nada
+    if (!isClient) return;
+
     setFechaHoy(new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
 
     const today = new Date();
@@ -92,9 +101,9 @@ export default function Dashboard() {
     const dateExpiredStart = new Date(today); dateExpiredStart.setMonth(today.getMonth() - 3);
     const dateExpiredEnd = new Date(today); dateExpiredEnd.setMonth(today.getMonth() - 1);
 
-    const savedAccounts = localStorage.getItem("dm_accounts_v55");
-    const savedClients = localStorage.getItem("dm_clients_v55");
-    const savedStock = localStorage.getItem("dm_stock_v55");
+    const savedAccounts = localStorage.getItem("dm_accounts_v80");
+    const savedClients = localStorage.getItem("dm_clients_v80");
+    const savedStock = localStorage.getItem("dm_stock_v80");
 
     if (savedAccounts && savedClients && savedStock) {
       setAccounts(JSON.parse(savedAccounts));
@@ -131,9 +140,9 @@ export default function Dashboard() {
       setStock(defaultStock);
       setAccounts(defaultAccounts);
       
-      localStorage.setItem("dm_clients_v55", JSON.stringify(defaultClients));
-      localStorage.setItem("dm_stock_v55", JSON.stringify(defaultStock));
-      localStorage.setItem("dm_accounts_v55", JSON.stringify(defaultAccounts));
+      localStorage.setItem("dm_clients_v80", JSON.stringify(defaultClients));
+      localStorage.setItem("dm_stock_v80", JSON.stringify(defaultStock));
+      localStorage.setItem("dm_accounts_v80", JSON.stringify(defaultAccounts));
     }
 
     const savedWelcome = localStorage.getItem("dm_msg_welcome"); if (savedWelcome) setMsgWelcome(savedWelcome);
@@ -142,7 +151,7 @@ export default function Dashboard() {
     const savedNewCreds = localStorage.getItem("dm_msg_newcreds"); if (savedNewCreds) setMsgNewCredentials(savedNewCreds);
     const savedReassign = localStorage.getItem("dm_msg_reassign"); if (savedReassign) setMsgReassigned(savedReassign);
 
-    const tutorialSeen = localStorage.getItem("dm_tutorial_seen_v55");
+    const tutorialSeen = localStorage.getItem("dm_tutorial_seen_v80");
     if (!tutorialSeen) {
       setTimeout(() => {
         const driverObj = driver({
@@ -152,33 +161,21 @@ export default function Dashboard() {
           doneBtnText: '¡Entendido!',
           allowClose: false,
           steps: [
-            { 
-              element: btnNuevaCuentaRef.current || undefined, 
-              popover: { title: 'Paso 1: Registrar Venta', description: 'Haz clic AQUÍ para abrir el formulario. Aquí podrás asignar una cuenta a un cliente y definir las fechas de vencimiento.' } 
-            },
-            { 
-              element: 'body', 
-              popover: { title: 'Paso 2: Llenar Datos', description: 'En el formulario que aparece, llena los datos del cliente (si es nuevo se guardará automáticamente), la plataforma, las credenciales y las fechas. Haz clic en "Guardar" al terminar.' } 
-            },
-            { 
-              element: tableRef.current || undefined, 
-              popover: { title: 'Paso 3: Gestionar Ventas', description: 'Aquí verás todas tus ventas. Cada fila tiene botones de acción: Enviar credenciales (icono verde), Gestionar/Renovar (icono naranja para vencidas), Editar (lápiz) y Eliminar (papelera).' } 
-            },
-            { 
-              element: "aside", 
-              popover: { title: 'Paso 4: Explorar Secciones', description: 'Usa este menú lateral para gestionar Clientes, ver el Inventario disponible, revisar los Productos a la venta o editar las plantillas de Mensajes de WhatsApp.' } 
-            }
+            { element: btnNuevaCuentaRef.current || undefined, popover: { title: 'Paso 1: Registrar Venta', description: 'Haz clic AQUÍ para abrir el formulario. Aquí podrás asignar una cuenta a un cliente y definir las fechas de vencimiento.' } },
+            { element: 'body', popover: { title: 'Paso 2: Llenar Datos', description: 'En el formulario que aparece, llena los datos del cliente (si es nuevo se guardará automáticamente), la plataforma, las credenciales y las fechas. Haz clic en "Guardar" al terminar.' } },
+            { element: tableRef.current || undefined, popover: { title: 'Paso 3: Gestionar Ventas', description: 'Aquí verás todas tus ventas. Cada fila tiene botones de acción: Enviar credenciales (icono verde), Gestionar/Renovar (icono naranja para vencidas), Editar (lápiz) y Eliminar (papelera).' } },
+            { element: "aside", popover: { title: 'Paso 4: Explorar Secciones', description: 'Usa este menú lateral para gestionar Clientes, ver el Inventario disponible, revisar los Productos a la venta o editar las plantillas de Mensajes de WhatsApp.' } }
           ],
-          onDestroyed: () => { localStorage.setItem("dm_tutorial_seen_v55", "true"); }
+          onDestroyed: () => { localStorage.setItem("dm_tutorial_seen_v80", "true"); }
         });
         driverObj.drive();
       }, 1000);
     }
-  }, []);
+  }, [isClient]);
 
-  useEffect(() => { if (accounts.length > 0) localStorage.setItem("dm_accounts_v55", JSON.stringify(accounts)); }, [accounts]);
-  useEffect(() => { if (clients.length > 0) localStorage.setItem("dm_clients_v55", JSON.stringify(clients)); }, [clients]);
-  useEffect(() => { if (stock.length > 0) localStorage.setItem("dm_stock_v55", JSON.stringify(stock)); }, [stock]);
+  useEffect(() => { if (isClient && accounts.length > 0) localStorage.setItem("dm_accounts_v80", JSON.stringify(accounts)); }, [accounts, isClient]);
+  useEffect(() => { if (isClient && clients.length > 0) localStorage.setItem("dm_clients_v80", JSON.stringify(clients)); }, [clients, isClient]);
+  useEffect(() => { if (isClient && stock.length > 0) localStorage.setItem("dm_stock_v80", JSON.stringify(stock)); }, [stock, isClient]);
   useEffect(() => { localStorage.setItem("dm_msg_welcome", msgWelcome); }, [msgWelcome]);
   useEffect(() => { localStorage.setItem("dm_msg_renewal", msgRenewal); }, [msgRenewal]);
   useEffect(() => { localStorage.setItem("dm_msg_expired", msgExpired); }, [msgExpired]);
@@ -572,6 +569,9 @@ export default function Dashboard() {
   const totalReembolsos = useMemo(() => accounts.reduce((sum, acc) => sum + getAccountData(acc).refund, 0), [accounts]);
   const maxVal = Math.max(totalIngresos, totalReembolsos) || 1;
 
+  // Si no es cliente, mostramos una pantalla de carga rápida
+  if (!isClient) return <div className="min-h-screen bg-[#09090B] flex items-center justify-center text-white">Cargando sistema...</div>;
+
   return (
     <>
       <style jsx global>{`
@@ -688,7 +688,7 @@ export default function Dashboard() {
 
       <div className="flex min-h-screen bg-[#09090B] text-[#F4F4F5] font-sans">
         
-        <aside className="w-[240px] bg-[#0D0D10] border-r border-[#292930] flex flex-col p-4 fixed h-full z-10 hidden md:flex">
+        <aside className="w-[240px] bg-[#0D0D10] border-r border-[#292930] flex-col p-4 fixed h-full z-10 hidden md:flex">
           <div className="flex items-center gap-2 mb-8 px-2 mt-2">
             <div className="w-8 h-8 rounded overflow-hidden border border-[#292930]">
               <Image src="/avatar.png" alt="AlexStreaming" width={32} height={32} className="w-full h-full object-cover" />
@@ -719,7 +719,7 @@ export default function Dashboard() {
           <button onClick={() => setActiveTab("Vencidas")} className={`p-2 ${activeTab === 'Vencidas' ? 'text-[#E50914]' : 'text-[#A1A1AA]'}`}><AlertTriangle size={20}/></button>
         </div>
 
-        <main className="flex-1 md:ml-[240px] p-6 w-full md:w-[calc(100vw-240px)] overflow-hidden pb-20 md:pb-6">
+        <main className="flex-1 md:ml-[240px] p-6 w-full md:w-[calc(100vw-240px)] overflow-hidden pb-24 md:pb-6">
           
           <header className="flex justify-between items-center mb-6">
             <div>
