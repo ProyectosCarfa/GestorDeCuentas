@@ -12,8 +12,7 @@ import Link from "next/link";
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import * as htmlToImage from 'html-to-image'; 
-import Image from "next/image";
-import AvatarImg from "../../src/assets/avatar.png"; 
+import Image from "next/image"; 
 
 type AccountStatus = "Activa" | "Por Vencer" | "Vencida";
 
@@ -73,10 +72,7 @@ export default function Dashboard() {
   const receiptRef = useRef<HTMLDivElement>(null);
   const btnNuevaCuentaRef = useRef<HTMLButtonElement>(null);
   const tableRef = useRef<HTMLDivElement>(null);
-  const btnManageRef = useRef<HTMLButtonElement>(null);
-  const btnSendRef = useRef<HTMLButtonElement>(null);
 
-  // CARGA INICIAL
   useEffect(() => {
     setFechaHoy(new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
 
@@ -92,9 +88,9 @@ export default function Dashboard() {
     const dateExpiredStart = new Date(today); dateExpiredStart.setMonth(today.getMonth() - 3);
     const dateExpiredEnd = new Date(today); dateExpiredEnd.setMonth(today.getMonth() - 1);
 
-    const savedAccounts = localStorage.getItem("dm_accounts_v40");
-    const savedClients = localStorage.getItem("dm_clients_v40");
-    const savedStock = localStorage.getItem("dm_stock_v40");
+    const savedAccounts = localStorage.getItem("dm_accounts_v50");
+    const savedClients = localStorage.getItem("dm_clients_v50");
+    const savedStock = localStorage.getItem("dm_stock_v50");
 
     if (savedAccounts && savedClients && savedStock) {
       setAccounts(JSON.parse(savedAccounts));
@@ -131,9 +127,9 @@ export default function Dashboard() {
       setStock(defaultStock);
       setAccounts(defaultAccounts);
       
-      localStorage.setItem("dm_clients_v40", JSON.stringify(defaultClients));
-      localStorage.setItem("dm_stock_v40", JSON.stringify(defaultStock));
-      localStorage.setItem("dm_accounts_v40", JSON.stringify(defaultAccounts));
+      localStorage.setItem("dm_clients_v50", JSON.stringify(defaultClients));
+      localStorage.setItem("dm_stock_v50", JSON.stringify(defaultStock));
+      localStorage.setItem("dm_accounts_v50", JSON.stringify(defaultAccounts));
     }
 
     const savedWelcome = localStorage.getItem("dm_msg_welcome"); if (savedWelcome) setMsgWelcome(savedWelcome);
@@ -142,8 +138,7 @@ export default function Dashboard() {
     const savedNewCreds = localStorage.getItem("dm_msg_newcreds"); if (savedNewCreds) setMsgNewCredentials(savedNewCreds);
     const savedReassign = localStorage.getItem("dm_msg_reassign"); if (savedReassign) setMsgReassigned(savedReassign);
 
-    // TUTORIAL PRINCIPAL
-    const tutorialSeen = localStorage.getItem("dm_tutorial_seen_v40");
+    const tutorialSeen = localStorage.getItem("dm_tutorial_seen_v50");
     if (!tutorialSeen) {
       setTimeout(() => {
         const driverObj = driver({
@@ -158,16 +153,16 @@ export default function Dashboard() {
             { element: tableRef.current, popover: { title: 'Paso 3: Gestionar Ventas', description: 'Aquí verás todas tus ventas. Cada fila tiene botones de acción: Enviar credenciales (icono verde), Gestionar/Renovar (icono naranja para vencidas), Editar (lápiz) y Eliminar (papelera).' } },
             { element: "aside", popover: { title: 'Paso 4: Explorar Secciones', description: 'Usa este menú lateral para gestionar Clientes, ver el Inventario disponible, revisar los Productos a la venta o editar las plantillas de Mensajes de WhatsApp.' } }
           ],
-          onDestroyed: () => { localStorage.setItem("dm_tutorial_seen_v40", "true"); }
+          onDestroyed: () => { localStorage.setItem("dm_tutorial_seen_v50", "true"); }
         });
         driverObj.drive();
       }, 1000);
     }
   }, []);
 
-  useEffect(() => { if (accounts.length > 0) localStorage.setItem("dm_accounts_v40", JSON.stringify(accounts)); }, [accounts]);
-  useEffect(() => { if (clients.length > 0) localStorage.setItem("dm_clients_v40", JSON.stringify(clients)); }, [clients]);
-  useEffect(() => { if (stock.length > 0) localStorage.setItem("dm_stock_v40", JSON.stringify(stock)); }, [stock]);
+  useEffect(() => { if (accounts.length > 0) localStorage.setItem("dm_accounts_v50", JSON.stringify(accounts)); }, [accounts]);
+  useEffect(() => { if (clients.length > 0) localStorage.setItem("dm_clients_v50", JSON.stringify(clients)); }, [clients]);
+  useEffect(() => { if (stock.length > 0) localStorage.setItem("dm_stock_v50", JSON.stringify(stock)); }, [stock]);
   useEffect(() => { localStorage.setItem("dm_msg_welcome", msgWelcome); }, [msgWelcome]);
   useEffect(() => { localStorage.setItem("dm_msg_renewal", msgRenewal); }, [msgRenewal]);
   useEffect(() => { localStorage.setItem("dm_msg_expired", msgExpired); }, [msgExpired]);
@@ -232,7 +227,6 @@ export default function Dashboard() {
     window.open(`https://wa.me/${acc.phone}?text=${encodeURIComponent(msg)}`, "_blank");
   };
 
-  // MODAL DE GESTIÓN CON TUTORIAL AUTOMÁTICO
   const openManageModal = (account: Account) => {
     setSelectedAccount(account);
     setModalAction("renew");
@@ -576,7 +570,6 @@ export default function Dashboard() {
         .hover-card:hover { border-color: #E50914 !important; background: #1B1B21 !important; }
       `}</style>
 
-      {/* MODAL DE GESTIÓN (RENOVAR, REASIGNAR, ELIMINAR) */}
       {isModalOpen && selectedAccount && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
           <div className="bg-[#09090B] border border-[#292930] rounded-xl w-full max-w-md overflow-hidden">
@@ -648,7 +641,7 @@ export default function Dashboard() {
             <>
               <div style={{ textAlign: 'center', marginBottom: '20px' }}>
                 <div style={{ display: 'inline-block', marginBottom: '10px' }}>
-                  <Image src={AvatarImg} alt="AlexStreaming" width={60} height={60} className="rounded-lg object-cover" />
+                  <Image src="/avatar.png" alt="AlexStreaming" width={60} height={60} className="rounded-lg object-cover" />
                 </div>
                 <h2 style={{ margin: 0, fontSize: '20px', fontWeight: 'bold', color: '#F4F4F5' }}>AlexStreaming</h2>
                 <p style={{ margin: 0, color: '#A1A1AA', fontSize: '12px' }}>Boleta de Venta Digital</p>
@@ -682,7 +675,7 @@ export default function Dashboard() {
         <aside className="w-[240px] bg-[#0D0D10] border-r border-[#292930] flex flex-col p-4 fixed h-full z-10 hidden md:flex">
           <div className="flex items-center gap-2 mb-8 px-2 mt-2">
             <div className="w-8 h-8 rounded overflow-hidden border border-[#292930]">
-              <Image src={AvatarImg} alt="AlexStreaming" className="w-full h-full object-cover" />
+              <Image src="/avatar.png" alt="AlexStreaming" width={32} height={32} className="w-full h-full object-cover" />
             </div>
             <span className="text-lg font-bold tracking-wide text-[#F4F4F5]">AlexStreaming</span>
           </div>
