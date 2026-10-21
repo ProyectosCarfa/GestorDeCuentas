@@ -13,8 +13,13 @@ export default function LandingPage() {
         {/* NAVBAR */}
         <nav className="flex items-center justify-between px-6 py-4 border-b border-[#292930] bg-[#000000] sticky top-0 z-50">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded border border-[#292930] overflow-hidden bg-[#1B1B21]">
-               <Image src="/avatar.png" alt="AlexStreaming Logo" width={32} height={32} className="w-full h-full object-cover" />
+            <div className="relative w-8 h-8 rounded border border-[#292930] overflow-hidden bg-[#1B1B21]">
+               <Image 
+                 src="/avatar.png" 
+                 alt="AlexStreaming Logo" 
+                 fill 
+                 className="object-cover" 
+               />
             </div>
             <span className="text-sm font-bold tracking-wide text-[#F4F4F5]">
               AlexStreaming <span className="text-[#E50914]">GDC</span>
@@ -60,7 +65,12 @@ export default function LandingPage() {
           </div>
 
           <div className="relative w-full h-64 md:h-80 rounded-lg overflow-hidden border border-[#292930]">
-            <Image src="/dashboard-img.jpg" alt="Streaming Dashboard" fill className="object-cover opacity-80" />
+            <Image 
+              src="/dashboard-img.jpg" 
+              alt="Streaming Dashboard" 
+              fill 
+              className="object-cover opacity-80" 
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-[#000000] to-transparent"></div>
           </div>
         </div>
@@ -106,7 +116,12 @@ export default function LandingPage() {
         {/* IMAGEN Y LINKS */}
         <div className="bg-[#000000] p-8 md:p-12 border-b border-[#292930] grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
           <div className="relative w-full h-64 md:h-80 rounded-lg overflow-hidden border border-[#292930]">
-             <Image src="/links-img.jpg" alt="Links y Gestión" fill className="object-cover opacity-80" />
+             <Image 
+               src="/links-img.jpg" 
+               alt="Links y Gestión" 
+               fill 
+               className="object-cover opacity-80" 
+             />
           </div>
           <div>
              <h2 className="text-xl font-bold mb-4 text-[#F4F4F5]">Conexión Directa con tus Clientes</h2>
