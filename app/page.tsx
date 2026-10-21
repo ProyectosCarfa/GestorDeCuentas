@@ -10,10 +10,11 @@ export default function LandingPage() {
       
       <div className="w-full max-w-6xl flex flex-col bg-[#000000]">
         
+        {/* NAVBAR */}
         <nav className="flex items-center justify-between px-6 py-4 border-b border-[#292930] bg-[#000000] sticky top-0 z-50">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded border border-[#292930] overflow-hidden bg-[#1B1B21]">
-               <Image src="/avatar.png" alt="Logo" width={32} height={32} className="w-full h-full object-cover" />
+               <Image src="/avatar.png" alt="AlexStreaming Logo" width={32} height={32} className="w-full h-full object-cover" />
             </div>
             <span className="text-sm font-bold tracking-wide text-[#F4F4F5]">
               AlexStreaming <span className="text-[#E50914]">GDC</span>
@@ -31,6 +32,7 @@ export default function LandingPage() {
           </Link>
         </nav>
 
+        {/* HERO SECTION */}
         <div className="px-6 py-16 md:py-20 border-b border-[#292930] relative bg-[#000000] grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
           
           <div>
@@ -63,6 +65,7 @@ export default function LandingPage() {
           </div>
         </div>
 
+        {/* PLATAFORMAS */}
         <div className="py-4 border-b border-[#292930] bg-[#000000] overflow-hidden relative flex items-center">
           <div className="flex w-max animate-marquee gap-10 opacity-60 items-center px-6">
             {[...platforms, ...platforms].map((plat, i) => (
@@ -73,6 +76,7 @@ export default function LandingPage() {
           </div>
         </div>
 
+        {/* CARACTERÍSTICAS */}
         <div id="features" className="grid grid-cols-1 md:grid-cols-3 border-b border-[#292930] bg-[#000000]">
           <div className="p-8 border-b md:border-b-0 md:border-r border-[#292930] hover:bg-[#0D0D10] transition-colors duration-150 group">
             <div className="bg-[#141418] w-10 h-10 rounded border border-[#292930] flex items-center justify-center mb-5 group-hover:border-[#E50914] transition-colors duration-150">
@@ -99,6 +103,7 @@ export default function LandingPage() {
           </div>
         </div>
 
+        {/* IMAGEN Y LINKS */}
         <div className="bg-[#000000] p-8 md:p-12 border-b border-[#292930] grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
           <div className="relative w-full h-64 md:h-80 rounded-lg overflow-hidden border border-[#292930]">
              <Image src="/links-img.jpg" alt="Links y Gestión" fill className="object-cover opacity-80" />
@@ -115,6 +120,7 @@ export default function LandingPage() {
           </div>
         </div>
 
+        {/* CÓMO FUNCIONA */}
         <div id="how" className="bg-[#000000] p-8 md:p-12 border-b border-[#292930]">
           <div className="mb-10">
             <h2 className="text-xl font-bold mb-2 text-[#F4F4F5]">Flujo Operativo</h2>
@@ -154,6 +160,7 @@ export default function LandingPage() {
           </div>
         </div>
 
+        {/* SEGURIDAD */}
         <div id="security" className="bg-[#000000] p-8 md:p-12 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div>
             <div className="inline-flex items-center gap-2 border border-[#292930] bg-[#0D0D10] px-3 py-1 rounded text-[10px] font-bold text-[#A1A1AA] mb-4 tracking-widest uppercase">
@@ -183,6 +190,7 @@ export default function LandingPage() {
           </div>
         </div>
 
+        {/* CTA FINAL */}
         <div className="bg-[#000000] p-10 md:p-16 flex flex-col items-center justify-center border-t border-[#292930]">
           <h2 className="text-xl md:text-2xl font-bold mb-3 text-[#F4F4F5]">¿Listo para asumir el control?</h2>
           <p className="text-[#A1A1AA] text-sm mb-8 text-center max-w-md">Accede a la plataforma y comienza a operar con estándares profesionales.</p>
