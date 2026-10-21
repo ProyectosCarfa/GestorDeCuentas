@@ -88,9 +88,9 @@ export default function Dashboard() {
     const dateExpiredStart = new Date(today); dateExpiredStart.setMonth(today.getMonth() - 3);
     const dateExpiredEnd = new Date(today); dateExpiredEnd.setMonth(today.getMonth() - 1);
 
-    const savedAccounts = localStorage.getItem("dm_accounts_v50");
-    const savedClients = localStorage.getItem("dm_clients_v50");
-    const savedStock = localStorage.getItem("dm_stock_v50");
+    const savedAccounts = localStorage.getItem("dm_accounts_v52");
+    const savedClients = localStorage.getItem("dm_clients_v52");
+    const savedStock = localStorage.getItem("dm_stock_v52");
 
     if (savedAccounts && savedClients && savedStock) {
       setAccounts(JSON.parse(savedAccounts));
@@ -127,9 +127,9 @@ export default function Dashboard() {
       setStock(defaultStock);
       setAccounts(defaultAccounts);
       
-      localStorage.setItem("dm_clients_v50", JSON.stringify(defaultClients));
-      localStorage.setItem("dm_stock_v50", JSON.stringify(defaultStock));
-      localStorage.setItem("dm_accounts_v50", JSON.stringify(defaultAccounts));
+      localStorage.setItem("dm_clients_v52", JSON.stringify(defaultClients));
+      localStorage.setItem("dm_stock_v52", JSON.stringify(defaultStock));
+      localStorage.setItem("dm_accounts_v52", JSON.stringify(defaultAccounts));
     }
 
     const savedWelcome = localStorage.getItem("dm_msg_welcome"); if (savedWelcome) setMsgWelcome(savedWelcome);
@@ -138,7 +138,7 @@ export default function Dashboard() {
     const savedNewCreds = localStorage.getItem("dm_msg_newcreds"); if (savedNewCreds) setMsgNewCredentials(savedNewCreds);
     const savedReassign = localStorage.getItem("dm_msg_reassign"); if (savedReassign) setMsgReassigned(savedReassign);
 
-    const tutorialSeen = localStorage.getItem("dm_tutorial_seen_v50");
+    const tutorialSeen = localStorage.getItem("dm_tutorial_seen_v52");
     if (!tutorialSeen) {
       setTimeout(() => {
         const driverObj = driver({
@@ -153,16 +153,16 @@ export default function Dashboard() {
             { element: tableRef.current, popover: { title: 'Paso 3: Gestionar Ventas', description: 'Aquí verás todas tus ventas. Cada fila tiene botones de acción: Enviar credenciales (icono verde), Gestionar/Renovar (icono naranja para vencidas), Editar (lápiz) y Eliminar (papelera).' } },
             { element: "aside", popover: { title: 'Paso 4: Explorar Secciones', description: 'Usa este menú lateral para gestionar Clientes, ver el Inventario disponible, revisar los Productos a la venta o editar las plantillas de Mensajes de WhatsApp.' } }
           ],
-          onDestroyed: () => { localStorage.setItem("dm_tutorial_seen_v50", "true"); }
+          onDestroyed: () => { localStorage.setItem("dm_tutorial_seen_v52", "true"); }
         });
         driverObj.drive();
       }, 1000);
     }
   }, []);
 
-  useEffect(() => { if (accounts.length > 0) localStorage.setItem("dm_accounts_v50", JSON.stringify(accounts)); }, [accounts]);
-  useEffect(() => { if (clients.length > 0) localStorage.setItem("dm_clients_v50", JSON.stringify(clients)); }, [clients]);
-  useEffect(() => { if (stock.length > 0) localStorage.setItem("dm_stock_v50", JSON.stringify(stock)); }, [stock]);
+  useEffect(() => { if (accounts.length > 0) localStorage.setItem("dm_accounts_v52", JSON.stringify(accounts)); }, [accounts]);
+  useEffect(() => { if (clients.length > 0) localStorage.setItem("dm_clients_v52", JSON.stringify(clients)); }, [clients]);
+  useEffect(() => { if (stock.length > 0) localStorage.setItem("dm_stock_v52", JSON.stringify(stock)); }, [stock]);
   useEffect(() => { localStorage.setItem("dm_msg_welcome", msgWelcome); }, [msgWelcome]);
   useEffect(() => { localStorage.setItem("dm_msg_renewal", msgRenewal); }, [msgRenewal]);
   useEffect(() => { localStorage.setItem("dm_msg_expired", msgExpired); }, [msgExpired]);
